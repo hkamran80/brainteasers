@@ -113,7 +113,15 @@ const Game: NextPage = () => {
 
                     <div className="space-y-2">
                         <h2 className="text-2xl font-medium">Join Code</h2>
-                        <p className="font-bold">{id}</p>
+                        <button
+                            type="button"
+                            className="font-bold"
+                            onClick={() =>
+                                navigator.clipboard.writeText(id as string)
+                            }
+                        >
+                            {id}
+                        </button>
                     </div>
 
                     <h2 className="text-2xl font-medium">Categories</h2>

@@ -14,6 +14,7 @@ const CreateGame: NextPage = () => {
     const [reload, setReload] = useState<boolean>(false);
     const [maxScore, setMaxScore] = useState<number>(0);
     const [autoAdvance, setAutoAdvance] = useState<boolean>(false);
+    const [timeLimit, setTimeLimit] = useState<boolean>(false);
 
     const socket = useContext(SocketContext);
     const { push } = useRouter();
@@ -72,11 +73,19 @@ const CreateGame: NextPage = () => {
                 </span>
             </div>
 
-            <Checkbox
-                label="Auto-advance to next question after five seconds"
-                state={autoAdvance}
-                setState={setAutoAdvance}
-            />
+            <section className="space-y-3">
+                <Checkbox
+                    label="Auto-advance to next question after five seconds"
+                    state={autoAdvance}
+                    setState={setAutoAdvance}
+                />
+
+                <Checkbox
+                    label="Limit question to seven seconds"
+                    state={timeLimit}
+                    setState={setTimeLimit}
+                />
+            </section>
 
             <button
                 type="button"
@@ -99,6 +108,7 @@ const CreateGame: NextPage = () => {
                             ),
                         maxScore * 100,
                         autoAdvance,
+                        timeLimit,
                     );
                 }}
             >

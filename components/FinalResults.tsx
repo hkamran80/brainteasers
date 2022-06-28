@@ -1,5 +1,5 @@
-import Layout from './Layout';
-import { useRouter } from 'next/router';
+import Layout from "./Layout";
+import { useRouter } from "next/router";
 import type { EndResults } from "../types/game";
 
 const FinalResults = ({ finalResults }: { finalResults: EndResults }) => {

@@ -1,6 +1,6 @@
-import Layout from './Layout';
-import { classNames } from '@hkamran/utility-web';
-import { useState } from 'react';
+import Layout from "./Layout";
+import { classNames } from "@hkamran/utility-web";
+import { useState } from "react";
 import type { QA } from "../types/game";
 
 const QuestionScreen = ({

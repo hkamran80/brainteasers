@@ -8,6 +8,7 @@ const QuestionResults = ({
     results,
     answer,
     category,
+    maxScore,
     autoAdvance,
     nextQuestion,
     endGame,
@@ -15,11 +16,15 @@ const QuestionResults = ({
     results: Results;
     answer: string;
     category: string;
+    maxScore: number;
     autoAdvance: boolean;
     nextQuestion: () => void;
     endGame: () => void;
 }) => {
     const [timeRemaining, setTimeRemaining] = useState<number>(5);
+    const [correctQuestionsRemaining, setCorrectQuestionsRemaining] =
+        useState<number>(0);
+
     useEffect(() => {
         if (autoAdvance) {
             const timeInterval = setInterval(() => {
@@ -31,7 +36,21 @@ const QuestionResults = ({
                 }
             }, 1000);
         }
-    }, [autoAdvance, nextQuestion, timeRemaining]);
+
+        setCorrectQuestionsRemaining(
+            (maxScore -
+                results.scoreUpdates.sort(
+                    ({ score: scoreA }, { score: scoreB }) => scoreB - scoreA,
+                )[0].score) /
+                100,
+        );
+    }, [
+        autoAdvance,
+        maxScore,
+        nextQuestion,
+        results.scoreUpdates,
+        timeRemaining,
+    ]);
 
     return (
         <Layout className="space-y-5">
@@ -65,7 +84,21 @@ const QuestionResults = ({
                 </p>
             </div>
 
-            <div className="py-10 space-y-4">
+            {maxScore !== 0 ? (
+                <p className="py-2 text-2xl">
+                    {correctQuestionsRemaining} correct question
+                    {correctQuestionsRemaining !== 1 ? "s" : ""} remaining
+                </p>
+            ) : (
+                ""
+            )}
+
+            <div
+                className={classNames(
+                    "space-y-4",
+                    maxScore !== 0 ? "py-5" : "py-10",
+                )}
+            >
                 {results.scoreUpdates.map(
                     ({ name, score, difference }, index) => (
                         <div

@@ -137,6 +137,7 @@ const Game: NextPage = () => {
                                     results={results}
                                     answer={answer}
                                     category={qa?.category as string}
+                                    maxScore={maxScore}
                                     autoAdvance={autoAdvance}
                                     nextQuestion={() =>
                                         socket?.emit("nextQuestion", id)

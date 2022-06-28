@@ -55,6 +55,7 @@ const Game: NextPage = () => {
             (
                 categories: string[],
                 maxScore: number,
+                autoAdvance: boolean,
                 players: {
                     [friendlyName: string]: number;
                 },
@@ -62,8 +63,7 @@ const Game: NextPage = () => {
                 setGameCategories(categories);
                 setMaxScore(maxScore);
                 setPlayers(Object.keys(players));
-                // TODO: Add server variable for auto-advance
-                setAutoAdvance(true);
+                setAutoAdvance(autoAdvance);
             },
         );
 

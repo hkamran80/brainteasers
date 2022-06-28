@@ -14,6 +14,7 @@ const CreateGame: NextPage = () => {
     );
     const [reload, setReload] = useState<boolean>(false);
     const [maxScore, setMaxScore] = useState<number>(0);
+    const [autoAdvance, setAutoAdvance] = useState<boolean>(false);
 
     const socket = useContext(SocketContext);
     const { push } = useRouter();
@@ -66,6 +67,12 @@ const CreateGame: NextPage = () => {
                 </span>
             </div>
 
+            <Checkbox
+                label="Auto-advance to next question after five seconds"
+                state={autoAdvance}
+                setState={setAutoAdvance}
+            />
+
             <button
                 type="button"
                 className="bg-sky-500 disabled:bg-gray-500 text-white p-4 rounded-lg text-center w-full"
@@ -86,6 +93,7 @@ const CreateGame: NextPage = () => {
                                     categoryIds[categoryIndex as number][0],
                             ),
                         maxScore * 100,
+                        autoAdvance,
                     );
                 }}
             >

@@ -50,7 +50,7 @@ const CreateGame: NextPage = () => {
 
             <div className="bg-indigo-500 text-white w-full p-4 rounded-lg flex flex-col space-y-1">
                 <span className="text-xs uppercase tracking-widest font-light">
-                    Maximum Score
+                    Maximum Number of Correct Questions
                 </span>
 
                 <input
@@ -59,12 +59,10 @@ const CreateGame: NextPage = () => {
                     className="bg-indigo-500 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
                     value={maxScore}
                     onChange={(e) => setMaxScore(Number(e.target.value))}
-                    step={100}
                 />
 
                 <span className="text-xs font-light">
-                    100 points per correct question. No points stripped for
-                    incorrect answers. Set to 0 for no maximum score.
+                    Set to 0 for unlimited gameplay
                 </span>
             </div>
 
@@ -87,7 +85,7 @@ const CreateGame: NextPage = () => {
                                 (categoryIndex) =>
                                     categoryIds[categoryIndex as number][0],
                             ),
-                        maxScore,
+                        maxScore * 100,
                     );
                 }}
             >

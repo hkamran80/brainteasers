@@ -4,12 +4,12 @@ import Layout from "./Layout";
 
 const QuestionResults = ({
     results,
-    answer,
+    answer,category,
     nextQuestion,
     endGame,
 }: {
     results: Results;
-    answer: string;
+    answer: string;category:string;
     nextQuestion: () => void;
     endGame: () => void;
 }) => {
@@ -17,7 +17,12 @@ const QuestionResults = ({
         <Layout className="space-y-5">
             <h1 className="text-5xl text-left">Brainteasers</h1>
 
-            <p className="text-2xl font-medium">{results.question}</p>
+            <div className="space-y-1">
+                <span className="text-sm uppercase tracking-widest font-light">
+                    {category}
+                </span>
+                <p className="text-2xl font-medium">{results.question}</p>
+            </div>
 
             <div className="space-y-2">
                 <p className="text-2xl">

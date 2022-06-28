@@ -1,5 +1,6 @@
 import { classNames } from "@hkamran/utility-web";
 import { useEffect, useState } from "react";
+import { Check } from "react-feather";
 import type { Results } from "../types/game";
 import Layout from "./Layout";
 
@@ -72,7 +73,15 @@ const QuestionResults = ({
                             className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
                         >
                             <div className="flex-1">
-                                <p className="font-medium">{name}</p>
+                                <div className="flex flex-row space-x-2 items-center">
+                                    <p className="font-medium">{name}</p>
+                                    {difference !== 0 ? (
+                                        <Check size={18} />
+                                    ) : (
+                                        ""
+                                    )}
+                                </div>
+
                                 <p className="text-xs uppercase tracking-widest font-light">
                                     {score} points
                                 </p>

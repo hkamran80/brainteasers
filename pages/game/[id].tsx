@@ -17,6 +17,7 @@ const Game: NextPage = () => {
     const [gameCategories, setGameCategories] = useState<string[]>([]);
     const [players, setPlayers] = useState<string[]>([]);
     const [maxScore, setMaxScore] = useState<number>(0);
+    const [autoAdvance, setAutoAdvance] = useState<boolean>(false);
 
     const [qa, setQA] = useState<{
         category: string;
@@ -61,6 +62,8 @@ const Game: NextPage = () => {
                 setGameCategories(categories);
                 setMaxScore(maxScore);
                 setPlayers(Object.keys(players));
+                // TODO: Add server variable for auto-advance
+                setAutoAdvance(true);
             },
         );
 
@@ -131,6 +134,7 @@ const Game: NextPage = () => {
                                     results={results}
                                     answer={answer}
                                     category={qa?.category as string}
+                                    autoAdvance={autoAdvance}
                                     nextQuestion={() =>
                                         socket?.emit("nextQuestion", id)
                                     }

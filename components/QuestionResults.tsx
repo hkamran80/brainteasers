@@ -1,18 +1,37 @@
 import { classNames } from "@hkamran/utility-web";
+import { useEffect, useState } from "react";
 import type { Results } from "../types/game";
 import Layout from "./Layout";
 
 const QuestionResults = ({
     results,
-    answer,category,
+    answer,
+    category,
+    autoAdvance,
     nextQuestion,
     endGame,
 }: {
     results: Results;
-    answer: string;category:string;
+    answer: string;
+    category: string;
+    autoAdvance: boolean;
     nextQuestion: () => void;
     endGame: () => void;
 }) => {
+    const [timeRemaining, setTimeRemaining] = useState<number>(5);
+    useEffect(() => {
+        if (autoAdvance) {
+            const timeInterval = setInterval(() => {
+                if (timeRemaining <= 0) {
+                    clearInterval(timeInterval);
+                    nextQuestion();
+                } else {
+                    setTimeRemaining(timeRemaining - 1);
+                }
+            }, 1000);
+        }
+    }, [autoAdvance, nextQuestion, timeRemaining]);
+
     return (
         <Layout className="space-y-5">
             <h1 className="text-5xl text-left">Brainteasers</h1>
@@ -71,13 +90,19 @@ const QuestionResults = ({
                 )}
             </div>
 
-            <button
-                type="button"
-                className="bg-sky-500 text-white p-4 rounded-lg text-center w-full"
-                onClick={nextQuestion}
-            >
-                Next Question
-            </button>
+            {autoAdvance ? (
+                <div className="bg-sky-500 text-white p-4 rounded-lg text-center w-full">
+                    {timeRemaining} second{timeRemaining !== 1 ? "s" : ""}
+                </div>
+            ) : (
+                <button
+                    type="button"
+                    className="bg-sky-500 text-white p-4 rounded-lg text-center w-full"
+                    onClick={nextQuestion}
+                >
+                    Next Question
+                </button>
+            )}
 
             <button
                 type="button"

@@ -43,12 +43,15 @@ const Game: NextPage = () => {
 
     useEffect(() => {
         if (id) {
+            socket?.emit("checkUsername");
             socket?.emit("joinGame", id);
         }
 
         socket?.once("gameError", () => {
             push("/");
         });
+
+        socket?.once("usernameError", () => push("/"));
 
         socket?.on(
             "joinSuccessful",

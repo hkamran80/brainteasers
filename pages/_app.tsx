@@ -3,11 +3,13 @@ import type { AppProps } from "next/app";
 import { createContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Layout from "../components/Layout";
+import { useRouter } from "next/router";
 
 export const SocketContext = createContext<Socket | null>(null);
 
 function Website({ Component, pageProps }: AppProps) {
     const [socket, setSocket] = useState<Socket>();
+    const { push } = useRouter();
 
     useEffect(() => {
         const socketInitializer = async () => {

@@ -1,4 +1,3 @@
-import { classNames } from "@hkamran/utility-web";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -19,7 +18,13 @@ const CreateGame: NextPage = () => {
     const socket = useContext(SocketContext);
     const { push } = useRouter();
 
+    useEffect(() => {
+        socket?.emit("checkUsername");
+    }, [socket]);
+
     if (socket) {
+        socket.once("usernameError", () => push("/"));
+
         socket.once("gameCreated", (gameRoomId: string) =>
             push({ pathname: `${gameRoomId}` }),
         );

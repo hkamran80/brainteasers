@@ -16,6 +16,10 @@ const Home: NextPage = () => {
     const socket = useContext(SocketContext);
     const { push } = useRouter();
 
+    if (socket) {
+        socket.once("usernameError", () => push("/"));
+    }
+
     return (
         <>
             <Head>

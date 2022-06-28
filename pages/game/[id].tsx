@@ -9,6 +9,7 @@ import QuestionScreen from "../../components/QuestionScreen";
 import type { PlayerScore, QA, Results } from "../../types/game";
 import FinalResults from "../../components/FinalResults";
 import QuestionResults from "../../components/QuestionResults";
+import Head from "next/head";
 
 const Game: NextPage = () => {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -93,6 +94,11 @@ const Game: NextPage = () => {
 
     return (
         <>
+            <Head>
+                {/* TODO: Store username globally */}
+                <title>Game | Brainteasers</title>
+            </Head>
+
             {!gameStarted && !finalResults ? (
                 <WaitingRoom
                     id={id as string}
@@ -124,6 +130,7 @@ const Game: NextPage = () => {
                                 <QuestionResults
                                     results={results}
                                     answer={answer}
+                                    category={qa?.category as string}
                                     nextQuestion={() =>
                                         socket?.emit("nextQuestion", id)
                                     }

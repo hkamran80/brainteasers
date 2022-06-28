@@ -7,14 +7,14 @@ import { classNames } from "@hkamran/utility-web";
 import WaitingRoom from "../../components/WaitingRoom";
 import QuestionScreen from "../../components/QuestionScreen";
 import type { PlayerScore, QA, Results } from "../../types/game";
+import FinalResults from "../../components/FinalResults";
+import QuestionResults from "../../components/QuestionResults";
 
 const Game: NextPage = () => {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showQuestion, setShowQuestion] = useState<boolean>(true);
     const [gameCategories, setGameCategories] = useState<string[]>([]);
-    const [players, setPlayers] = useState<{
-        [friendlyName: string]: number;
-    }>({});
+    const [players, setPlayers] = useState<string[]>([]);
     const [maxScore, setMaxScore] = useState<number>(0);
 
     const [qa, setQA] = useState<{
@@ -59,7 +59,7 @@ const Game: NextPage = () => {
             ) => {
                 setGameCategories(categories);
                 setMaxScore(maxScore);
-                setPlayers(players);
+                setPlayers(Object.keys(players));
             },
         );
 
@@ -98,7 +98,7 @@ const Game: NextPage = () => {
                     id={id as string}
                     gameCategories={gameCategories}
                     maxScore={maxScore}
-                    players={Object.keys(players)}
+                    players={players}
                     nextQuestion={() => socket?.emit("nextQuestion", id)}
                     deleteGame={() =>
                         confirm("Are you sure you want to delete this game?")
@@ -109,121 +109,10 @@ const Game: NextPage = () => {
             ) : (
                 <>
                     {finalResults ? (
-                        <Layout className="space-y-5">
-                            <h1 className="text-5xl text-left">Brainteasers</h1>
-
-                            {finalResults.maxScorers.length > 0 ? (
-                                <>
-                                    <h2 className="text-2xl font-medium">
-                                        Winner
-                                        {finalResults.maxScorers.length !== 1
-                                            ? "s"
-                                            : ""}
-                                    </h2>
-
-                                    <div className="py-0 space-y-4">
-                                        {finalResults.maxScorers.map(
-                                            ({ name, score }, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
-                                                >
-                                                    <div className="flex-1">
-                                                        <p className="font-medium">
-                                                            {name}
-                                                        </p>
-                                                        <p className="text-xs uppercase tracking-widest font-light">
-                                                            {score} points
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            ),
-                                        )}
-                                    </div>
-                                </>
-                            ) : (
-                                ""
-                            )}
-
-                            <h2 className="text-2xl font-medium">
-                                {finalResults.maxScorers.length > 0
-                                    ? "Other "
-                                    : ""}
-                                Players
-                            </h2>
-                            <div className="py-0 space-y-4">
-                                {finalResults.finalScores
-                                    .sort(
-                                        (
-                                            { score: scoreA },
-                                            { score: scoreB },
-                                        ) => scoreB - scoreA,
-                                    )
-                                    .map(({ name, score }, index) => (
-                                        <div
-                                            key={index}
-                                            className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
-                                        >
-                                            <div className="flex-1">
-                                                <p className="font-medium">
-                                                    {name}
-                                                </p>
-                                                <p className="text-xs uppercase tracking-widest font-light">
-                                                    {score} points
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-                            </div>
-
-                            <button
-                                type="button"
-                                className="bg-sky-500 text-white p-4 rounded-lg text-center w-full"
-                                onClick={() => push("/")}
-                            >
-                                Return Home
-                            </button>
-                        </Layout>
+                        <FinalResults finalResults={finalResults} />
                     ) : (
                         <>
                             {showQuestion ? (
-                                // <Layout width="max-w-5xl">
-                                //     <div className="space-y-2">
-                                //         <span className="uppercase tracking-widest font-light">
-                                //             {qa?.category}
-                                //         </span>
-                                //         <h1 className="text-4xl font-bold">
-                                //             {qa?.question}
-                                //         </h1>
-                                //     </div>
-
-                                //     <div className="space-y-2">
-                                //         {qa?.answers.map((answer, index) => (
-                                //             <button
-                                //                 key={index}
-                                //                 type="button"
-                                //                 className={classNames(
-                                //                     "text-white p-4 rounded-lg text-left w-full",
-                                //                     !answered
-                                //                         ? "bg-sky-500 hover:bg-sky-700 transition-colors duration-150 ease-in-out"
-                                //                         : "bg-gray-500",
-                                //                 )}
-                                //                 disabled={answered}
-                                //                 onClick={() => {
-                                //                     setAnswered(true);
-                                //                     setAnswer(answer);
-                                //                     socket?.emit(
-                                //                         "answer",
-                                //                         id,
-                                //                         answer,
-                                //                     );
-                                //                 }}
-                                //             >
-                                //                 {answer}
-                                //             </button>
-                                //         ))}
-                                //     </div>
-                                // </Layout>
                                 <QuestionScreen
                                     qa={qa as QA}
                                     selectAnswer={(answer) => {
@@ -232,94 +121,20 @@ const Game: NextPage = () => {
                                     }}
                                 />
                             ) : (
-                                <Layout className="space-y-5">
-                                    <h1 className="text-5xl text-left">
-                                        Brainteasers
-                                    </h1>
-
-                                    <p className="text-2xl font-medium">
-                                        {results.question}
-                                    </p>
-
-                                    <div className="space-y-2">
-                                        <p className="text-2xl">
-                                            Answer:{" "}
-                                            <span className="font-bold">
-                                                {results.correctAnswer}
-                                            </span>
-                                        </p>
-
-                                        <p className="text-2xl">
-                                            You answered:{" "}
-                                            <span
-                                                className={classNames(
-                                                    "font-bold",
-                                                    answer ===
-                                                        results.correctAnswer
-                                                        ? "text-green-500"
-                                                        : "text-red-500",
-                                                )}
-                                            >
-                                                {answer}
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    <div className="py-10 space-y-4">
-                                        {results.scoreUpdates.map(
-                                            (
-                                                { name, score, difference },
-                                                index,
-                                            ) => (
-                                                <div
-                                                    key={index}
-                                                    className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
-                                                >
-                                                    <div className="flex-1">
-                                                        <p className="font-medium">
-                                                            {name}
-                                                        </p>
-                                                        <p className="text-xs uppercase tracking-widest font-light">
-                                                            {score} points
-                                                        </p>
-                                                    </div>
-
-                                                    {difference !== 0 ? (
-                                                        <p className="text-sm uppercase tracking-widest font-light">
-                                                            +{difference} points
-                                                        </p>
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </div>
-                                            ),
-                                        )}
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        className="bg-sky-500 text-white p-4 rounded-lg text-center w-full"
-                                        onClick={() =>
-                                            socket?.emit("nextQuestion", id)
-                                        }
-                                    >
-                                        Next Question
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        className="bg-red-500 text-white p-4 rounded-lg text-center w-full"
-                                        onClick={() =>
-                                            confirm(
-                                                "Are you sure you want to end this game?",
-                                            )
-                                                ? socket?.emit("endGame", id)
-                                                : null
-                                        }
-                                    >
-                                        End Game
-                                    </button>
-                                </Layout>
+                                <QuestionResults
+                                    results={results}
+                                    answer={answer}
+                                    nextQuestion={() =>
+                                        socket?.emit("nextQuestion", id)
+                                    }
+                                    endGame={() =>
+                                        confirm(
+                                            "Are you sure you want to end this game?",
+                                        )
+                                            ? socket?.emit("endGame", id)
+                                            : null
+                                    }
+                                />
                             )}
                         </>
                     )}

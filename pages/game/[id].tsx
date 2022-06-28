@@ -1,24 +1,12 @@
 import Layout from "../../components/Layout";
-import { connected } from "process";
 import { SocketContext } from "../_app";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
-import categories from "../../data/categories.json";
 import { classNames } from "@hkamran/utility-web";
-
-const names = Object.keys(categories);
-
-type PlayerScore = { name: string; score: number };
-type Results = {
-    question: string;
-    correctAnswer: string;
-    scoreUpdates: {
-        name: string;
-        score: number;
-        difference: number;
-    }[];
-};
+import WaitingRoom from "../../components/WaitingRoom";
+import QuestionScreen from "../../components/QuestionScreen";
+import type { PlayerScore, QA, Results } from "../../types/game";
 
 const Game: NextPage = () => {
     const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -34,7 +22,6 @@ const Game: NextPage = () => {
         question: string;
         answers: string[];
     }>();
-    const [answered, setAnswered] = useState<boolean>(false);
     const [answer, setAnswer] = useState<string>("");
     const [results, setResults] = useState<Results>({
         question: "",
@@ -76,13 +63,12 @@ const Game: NextPage = () => {
             },
         );
 
-        socket?.on("question", (qa) => {
+        socket?.on("question", (qa: QA) => {
             if (!gameStarted) {
                 setGameStarted(true);
             }
 
             setShowQuestion(true);
-            setAnswered(false);
             setAnswer("");
             setQA(qa);
         });
@@ -108,91 +94,18 @@ const Game: NextPage = () => {
     return (
         <>
             {!gameStarted && !finalResults ? (
-                <Layout className="space-y-5">
-                    <h1 className="text-5xl text-left">Brainteasers</h1>
-
-                    <div className="space-y-2">
-                        <h2 className="text-2xl font-medium">Join Code</h2>
-                        <button
-                            type="button"
-                            className="font-bold"
-                            onClick={() =>
-                                navigator.clipboard.writeText(id as string)
-                            }
-                        >
-                            {id}
-                        </button>
-                    </div>
-
-                    <h2 className="text-2xl font-medium">Categories</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {Object.values(categories)
-                            .map((ids, index) => {
-                                return { id: ids[0], index };
-                            })
-                            .filter(
-                                ({ id }) => gameCategories.indexOf(id) !== -1,
-                            )
-                            .map(({ index }) => names[index])
-                            .map((name, index) => (
-                                <div
-                                    key={index}
-                                    className="bg-indigo-500 text-white w-full px-4 py-2 rounded-lg"
-                                >
-                                    {name}
-                                </div>
-                            ))}
-                    </div>
-
-                    <div className="space-y-2">
-                        <h2 className="text-2xl font-medium">Maximum Score</h2>
-                        <p>
-                            {maxScore === 0
-                                ? "No maximum score set. The game will continue until a player stops it."
-                                : `${maxScore
-                                      .toString()
-                                      .replace(
-                                          /\B(?=(\d{3})+(?!\d))/g,
-                                          ",",
-                                      )} points`}
-                        </p>
-                    </div>
-
-                    <h2 className="text-2xl font-medium">Players</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {Object.keys(players).map((name, index) => (
-                            <div
-                                key={index}
-                                className="bg-indigo-500 text-white w-full px-4 py-2 rounded-lg"
-                            >
-                                {name}
-                            </div>
-                        ))}
-                    </div>
-
-                    <button
-                        type="button"
-                        className="bg-sky-500 disabled:bg-gray-500 text-white p-4 rounded-lg text-center w-full"
-                        disabled={Object.keys(players).length < 2}
-                        onClick={() => socket?.emit("nextQuestion", id)}
-                    >
-                        Start Game
-                    </button>
-
-                    <button
-                        type="button"
-                        className="bg-red-500 text-white p-4 rounded-lg text-center w-full"
-                        onClick={() =>
-                            confirm(
-                                "Are you sure you want to delete this game?",
-                            )
-                                ? socket?.emit("endGame", id as string)
-                                : null
-                        }
-                    >
-                        Delete Game
-                    </button>
-                </Layout>
+                <WaitingRoom
+                    id={id as string}
+                    gameCategories={gameCategories}
+                    maxScore={maxScore}
+                    players={Object.keys(players)}
+                    nextQuestion={() => socket?.emit("nextQuestion", id)}
+                    deleteGame={() =>
+                        confirm("Are you sure you want to delete this game?")
+                            ? socket?.emit("endGame", id as string)
+                            : null
+                    }
+                />
             ) : (
                 <>
                     {finalResults ? (
@@ -274,43 +187,50 @@ const Game: NextPage = () => {
                     ) : (
                         <>
                             {showQuestion ? (
-                                <Layout width="max-w-5xl">
-                                    <div className="space-y-2">
-                                        <span className="uppercase tracking-widest font-light">
-                                            {qa?.category}
-                                        </span>
-                                        <h1 className="text-4xl font-bold">
-                                            {qa?.question}
-                                        </h1>
-                                    </div>
+                                // <Layout width="max-w-5xl">
+                                //     <div className="space-y-2">
+                                //         <span className="uppercase tracking-widest font-light">
+                                //             {qa?.category}
+                                //         </span>
+                                //         <h1 className="text-4xl font-bold">
+                                //             {qa?.question}
+                                //         </h1>
+                                //     </div>
 
-                                    <div className="space-y-2">
-                                        {qa?.answers.map((answer, index) => (
-                                            <button
-                                                key={index}
-                                                type="button"
-                                                className={classNames(
-                                                    "text-white p-4 rounded-lg text-left w-full",
-                                                    !answered
-                                                        ? "bg-sky-500 hover:bg-sky-700 transition-colors duration-150 ease-in-out"
-                                                        : "bg-gray-500",
-                                                )}
-                                                disabled={answered}
-                                                onClick={() => {
-                                                    setAnswered(true);
-                                                    setAnswer(answer);
-                                                    socket?.emit(
-                                                        "answer",
-                                                        id,
-                                                        answer,
-                                                    );
-                                                }}
-                                            >
-                                                {answer}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </Layout>
+                                //     <div className="space-y-2">
+                                //         {qa?.answers.map((answer, index) => (
+                                //             <button
+                                //                 key={index}
+                                //                 type="button"
+                                //                 className={classNames(
+                                //                     "text-white p-4 rounded-lg text-left w-full",
+                                //                     !answered
+                                //                         ? "bg-sky-500 hover:bg-sky-700 transition-colors duration-150 ease-in-out"
+                                //                         : "bg-gray-500",
+                                //                 )}
+                                //                 disabled={answered}
+                                //                 onClick={() => {
+                                //                     setAnswered(true);
+                                //                     setAnswer(answer);
+                                //                     socket?.emit(
+                                //                         "answer",
+                                //                         id,
+                                //                         answer,
+                                //                     );
+                                //                 }}
+                                //             >
+                                //                 {answer}
+                                //             </button>
+                                //         ))}
+                                //     </div>
+                                // </Layout>
+                                <QuestionScreen
+                                    qa={qa as QA}
+                                    selectAnswer={(answer) => {
+                                        setAnswer(answer);
+                                        socket?.emit("answer", id, answer);
+                                    }}
+                                />
                             ) : (
                                 <Layout className="space-y-5">
                                     <h1 className="text-5xl text-left">

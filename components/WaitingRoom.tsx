@@ -52,13 +52,15 @@ const WaitingRoom = ({
             </div>
 
             <div className="space-y-2">
-                <h2 className="text-2xl font-medium">Maximum Score</h2>
+                <h2 className="text-2xl font-medium">
+                    Maximum Number of Correct Questions
+                </h2>
                 <p>
                     {maxScore === 0
-                        ? "No maximum score set. The game will continue until a player stops it."
-                        : `${maxScore
+                        ? "No maximum number of correct questions set. The game will continue until a player stops it."
+                        : `${(maxScore / 100)
                               .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} points`}
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} questions`}
                 </p>
             </div>
 

@@ -114,7 +114,7 @@ class WebsiteDocument extends Document {
     render() {
         return (
             <Html lang="en">
-               <Head>
+                <Head>
                     <link rel="icon" type="image/png" href="/favicon.png" />
 
                     <meta name="robots" content="index, follow" />

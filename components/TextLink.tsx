@@ -20,7 +20,7 @@ const TextLink = ({
             </NextLink>
         );
     }
-    
+
     return (
         <a
             href={href}

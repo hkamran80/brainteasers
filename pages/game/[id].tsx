@@ -12,19 +12,22 @@ import QuestionResults from "../../components/QuestionResults";
 import Head from "next/head";
 
 const Game: NextPage = () => {
+    const [joinedGame, setJoinedGame] = useState<boolean>(false);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [showQuestion, setShowQuestion] = useState<boolean>(true);
     const [gameCategories, setGameCategories] = useState<string[]>([]);
     const [players, setPlayers] = useState<string[]>([]);
     const [maxScore, setMaxScore] = useState<number>(0);
     const [autoAdvance, setAutoAdvance] = useState<boolean>(false);
+    const [timeLimit, setTimeLimit] = useState<boolean>(false);
 
     const [qa, setQA] = useState<{
         category: string;
         question: string;
         answers: string[];
     }>();
-    const [answer, setAnswer] = useState<string>("");
+    const [answer, setAnswer] = useState<string | null>("");
+    const [timeoutUsed, setTimeoutUsed] = useState<boolean>(false);
     const [results, setResults] = useState<Results>({
         question: "",
         correctAnswer: "",
@@ -42,9 +45,10 @@ const Game: NextPage = () => {
     const socket = useContext(SocketContext);
 
     useEffect(() => {
-        if (id) {
+        if (id && !joinedGame) {
             socket?.emit("checkUsername");
             socket?.emit("joinGame", id);
+            setJoinedGame(true);
         }
 
         socket?.once("gameError", () => {
@@ -78,6 +82,18 @@ const Game: NextPage = () => {
             setShowQuestion(true);
             setAnswer("");
             setQA(qa);
+            setTimeoutUsed(false);
+        });
+
+        socket?.on("questionOver", () => {
+            console.debug("Question over!");
+
+            if ((answer === "" || answer === null) && !timeoutUsed) {
+                setTimeoutUsed(true);
+                setAnswer(null);
+                socket?.emit("answer", id, null);
+                console.debug("Answer set to `null`");
+            }
         });
 
         socket?.on("results", (question, correctAnswer, scoreUpdates) => {
@@ -96,7 +112,7 @@ const Game: NextPage = () => {
                 setFinalResults({ finalScores: newFinalScores, maxScorers });
             },
         );
-    }, [gameStarted, id, push, socket]);
+    }, [answer, gameStarted, id, joinedGame, push, socket, timeoutUsed]);
 
     return (
         <>
@@ -127,6 +143,7 @@ const Game: NextPage = () => {
                             {showQuestion ? (
                                 <QuestionScreen
                                     qa={qa as QA}
+                                    timeLimit={timeLimit}
                                     selectAnswer={(answer) => {
                                         setAnswer(answer);
                                         socket?.emit("answer", id, answer);

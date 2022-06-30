@@ -80,11 +80,11 @@ const CreateGame: NextPage = () => {
                     setState={setAutoAdvance}
                 />
 
-                <Checkbox
+                {/* <Checkbox
                     label="Limit question to seven seconds"
                     state={timeLimit}
                     setState={setTimeLimit}
-                />
+                /> */}
             </section>
 
             <button

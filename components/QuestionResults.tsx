@@ -14,7 +14,7 @@ const QuestionResults = ({
     endGame,
 }: {
     results: Results;
-    answer: string;
+    answer: string | null;
     category: string;
     maxScore: number;
     autoAdvance: boolean;
@@ -79,7 +79,7 @@ const QuestionResults = ({
                                 : "text-red-500",
                         )}
                     >
-                        {answer}
+                        {answer === null ? "Did Not Answer" : answer}
                     </span>
                 </p>
             </div>

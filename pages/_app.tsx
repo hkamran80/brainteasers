@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
+import Script from "next/script";
 
 export const SocketContext = createContext<Socket | null>(null);
 
@@ -27,6 +28,18 @@ function Website({ Component, pageProps }: AppProps) {
 
     return (
         <>
+            {process.env.NODE_ENV === "development" ||
+            typeof window === "undefined" ? (
+                ""
+            ) : (
+                <Script
+                    async
+                    defer
+                    data-website-id="62279a82-47a7-46fe-aef5-ad522da274ea"
+                    src="https://umami.unisontech.org/umami.js"
+                />
+            )}
+
             {socket ? (
                 <SocketContext.Provider value={socket}>
                     <Component {...pageProps} />

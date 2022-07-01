@@ -62,7 +62,7 @@ function Website({ Component, pageProps }: AppProps) {
                         console.debug("Toggled", darkModeValue);
                     }}
                 >
-                    {darkModeValue ? <Sun size={20} /> : <Moon size={20} />}
+                    {darkModeValue ? <Moon size={20} /> : <Sun size={20} />}
                 </button>
             </div>
 

@@ -30,7 +30,7 @@ const Home: NextPage = () => {
                 <h1 className="text-5xl text-center">Brainteasers</h1>
 
                 <div className="space-y-5">
-                    <div className="bg-indigo-500 text-white w-full p-4 rounded-lg flex flex-col space-y-1">
+                    <div className="bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 rounded-lg flex flex-col space-y-1">
                         <span className="text-xs uppercase tracking-widest font-light">
                             Username
                         </span>
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
                         <input
                             type="text"
                             placeholder="Choose a username"
-                            className="bg-indigo-500 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
+                            className="bg-indigo-500 dark:bg-indigo-700 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
                             value={username}
                             onChange={(e) => {
                                 setUsername(e.target.value);
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
                     <div
                         className={classNames(
                             !joiningGame ? "hidden" : "",
-                            "bg-indigo-500 text-white w-full p-4 rounded-lg flex flex-col space-y-1",
+                            "bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 rounded-lg flex flex-col space-y-1",
                         )}
                     >
                         <div className="flex flex-row">
@@ -69,7 +69,7 @@ const Home: NextPage = () => {
                         <input
                             type="text"
                             placeholder="Enter the game ID"
-                            className="bg-indigo-500 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
+                            className="bg-indigo-500 dark:bg-indigo-700 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
                             value={gameId}
                             onChange={(e) => setGameId(e.target.value)}
                             maxLength={5}

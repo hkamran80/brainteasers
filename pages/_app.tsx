@@ -5,12 +5,13 @@ import { io, Socket } from "socket.io-client";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
 import Script from "next/script";
+import useDarkMode from "use-dark-mode";
+import { Moon, Sun } from "react-feather";
 
 export const SocketContext = createContext<Socket | null>(null);
 
 function Website({ Component, pageProps }: AppProps) {
     const [socket, setSocket] = useState<Socket>();
-    const { push } = useRouter();
 
     useEffect(() => {
         const socketInitializer = async () => {
@@ -26,6 +27,18 @@ function Website({ Component, pageProps }: AppProps) {
         socketInitializer();
     }, []);
 
+    const { value: darkModeValue, toggle: toggleDarkMode } = useDarkMode(
+        false,
+        {
+            classNameDark: "dark",
+            classNameLight: "light",
+            element:
+                typeof window !== "undefined"
+                    ? document.documentElement
+                    : undefined,
+        },
+    );
+
     return (
         <>
             {process.env.NODE_ENV === "development" ||
@@ -39,6 +52,19 @@ function Website({ Component, pageProps }: AppProps) {
                     src="https://umami.unisontech.org/umami.js"
                 />
             )}
+
+            <div className="absolute top-8 right-8">
+                <button
+                    type="button"
+                    onClick={() => {
+                        console.debug("Toggling", darkModeValue);
+                        toggleDarkMode();
+                        console.debug("Toggled", darkModeValue);
+                    }}
+                >
+                    {darkModeValue ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+            </div>
 
             {socket ? (
                 <SocketContext.Provider value={socket}>

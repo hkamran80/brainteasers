@@ -103,7 +103,7 @@ const QuestionResults = ({
                     ({ name, score, difference }, index) => (
                         <div
                             key={index}
-                            className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
+                            className="bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 flex flex-row items-center rounded-lg"
                         >
                             <div className="flex-1">
                                 <div className="flex flex-row space-x-2 items-center">

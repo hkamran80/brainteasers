@@ -44,7 +44,7 @@ const WaitingRoom = ({
                     .map((name, index) => (
                         <div
                             key={index}
-                            className="bg-indigo-500 text-white w-full px-4 py-2 rounded-lg"
+                            className="bg-indigo-500 dark:bg-indigo-700 text-white w-full px-4 py-2 rounded-lg"
                         >
                             {name}
                         </div>
@@ -69,7 +69,7 @@ const WaitingRoom = ({
                 {players.map((name, index) => (
                     <div
                         key={index}
-                        className="bg-indigo-500 text-white w-full px-4 py-2 rounded-lg"
+                        className="bg-indigo-500 dark:bg-indigo-700 text-white w-full px-4 py-2 rounded-lg"
                     >
                         {name}
                     </div>

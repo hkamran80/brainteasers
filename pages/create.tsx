@@ -55,7 +55,7 @@ const CreateGame: NextPage = () => {
                 ))}
             </div>
 
-            <div className="bg-indigo-500 text-white w-full p-4 rounded-lg flex flex-col space-y-1">
+            <div className="bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 rounded-lg flex flex-col space-y-1">
                 <span className="text-xs uppercase tracking-widest font-light">
                     Maximum Number of Correct Questions
                 </span>
@@ -63,7 +63,7 @@ const CreateGame: NextPage = () => {
                 <input
                     type="number"
                     placeholder="Set a max score"
-                    className="bg-indigo-500 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
+                    className="bg-indigo-500 dark:bg-indigo-700 text-white placeholder:text-gray-300 focus:outline-offset-2 focus:outline-sky-500"
                     value={maxScore}
                     onChange={(e) => setMaxScore(Number(e.target.value))}
                 />

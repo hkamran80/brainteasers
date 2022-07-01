@@ -25,7 +25,7 @@ const FinalResults = ({ finalResults }: { finalResults: EndResults }) => {
                                 ({ name, score }, index) => (
                                     <div
                                         key={index}
-                                        className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
+                                        className="bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 flex flex-row items-center rounded-lg"
                                     >
                                         <div className="flex-1">
                                             <p className="font-medium">
@@ -59,7 +59,7 @@ const FinalResults = ({ finalResults }: { finalResults: EndResults }) => {
                                 .map(({ name, score }, index) => (
                                     <div
                                         key={index}
-                                        className="bg-indigo-500 text-white w-full p-4 flex flex-row items-center rounded-lg"
+                                        className="bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 flex flex-row items-center rounded-lg"
                                     >
                                         <div className="flex-1">
                                             <p className="font-medium">

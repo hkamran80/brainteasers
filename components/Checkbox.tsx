@@ -23,7 +23,7 @@ const Checkbox = ({
 
             <label
                 htmlFor={uniqueId}
-                className="border-2 border-solid border-black rounded-[50%] cursor-pointer h-[24px] left-0 absolute top-0 w-[24px] peer-checked:bg-sky-500 peer-checked:border-sky-500"
+                className="border-2 border-solid border-black dark:border-white rounded-[50%] cursor-pointer h-[24px] left-0 absolute top-0 w-[24px] peer-checked:bg-sky-500 peer-checked:border-sky-500"
             />
 
             <span className="relative ml-8">{label}</span>

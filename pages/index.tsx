@@ -53,18 +53,9 @@ const Home: NextPage = () => {
                             "bg-indigo-500 dark:bg-indigo-700 text-white w-full p-4 rounded-lg flex flex-col space-y-1",
                         )}
                     >
-                        <div className="flex flex-row">
-                            <span className="flex-1 text-xs uppercase tracking-widest font-light">
-                                Game ID
-                            </span>
-
-                            <button
-                                type="button"
-                                onClick={() => setJoiningGame(false)}
-                            >
-                                <X size={16} />
-                            </button>
-                        </div>
+                        <span className="text-xs uppercase tracking-widest font-light">
+                            Game ID
+                        </span>
 
                         <input
                             type="text"
@@ -78,9 +69,9 @@ const Home: NextPage = () => {
 
                     <div
                         className={classNames(
-                            "text-center",
+                            "text-center grid grid-cols-1 gap-4",
                             !joiningGame
-                                ? "grid grid-cols-1 md:grid-cols-2 gap-4"
+                                ? "md:grid-cols-2"
                                 : "",
                         )}
                     >
@@ -107,6 +98,15 @@ const Home: NextPage = () => {
                             }}
                         >
                             Join Game
+                        </button>
+
+                        <button
+                            className={classNames("bg-sky-500 disabled:bg-gray-500 text-white p-4 rounded-lg w-full",!joiningGame?"hidden":"")}
+                            onClick={() => {
+                                setJoiningGame(false)
+                            }}
+                        >
+                            Go Back
                         </button>
                     </div>
                 </div>

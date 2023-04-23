@@ -49,7 +49,7 @@ function Website({ Component, pageProps }: AppProps) {
                     async
                     defer
                     data-website-id="62279a82-47a7-46fe-aef5-ad522da274ea"
-                    src="https://umami.unisontech.org/umami.js"
+                    src="https://umami.unisontech.org/script.js"
                 />
             )}
 
